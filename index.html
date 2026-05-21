@@ -1,170 +1,215 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Gestión de Contactos</title>
-
-    <link rel="icon" href="assets/img/favicon.png">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>gestor de contactos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; }
+        .navbar { margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table th { background-color: #f8f9fa; font-weight: 600; }
+        .btn-accion { margin-right: 5px; font-size: 0.85rem; }
+    </style>
 </head>
-
 <body>
-
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-
-            <a class="navbar-brand fw-bold" href="#">
-                Gestión de Contactos
-            </a>
-
+            <a class="navbar-brand" href="#">agenda de contactos</a>
         </div>
     </nav>
 
-    <!-- CONTENIDO -->
-    <div class="container mt-5">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-
-            <h2 class="fw-bold">
-                Lista de Contactos
-            </h2>
-
-            <button
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#modalContacto">
-
-                Agregar Contacto
-
-            </button>
-
-        </div>
-
-        <div class="card shadow-lg border-0">
-
-            <div class="card-body">
-
-                <div class="table-responsive">
-
-                    <table class="table table-hover align-middle">
-
-                        <thead class="table-dark">
-
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Categoría</th>
-                                <th>Tipo</th>
-                                <th>Valor</th>
-                                <th>Acciones</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="tablaContactos">
-
-                        </tbody>
-
-                    </table>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4" id="titulo_formulario">nuevo contacto</h5>
+                        <form id="form_contacto">
+                            <input type="hidden" id="id_contacto" value="">
+                            <div class="mb-3">
+                                <label class="form-label">nombre</label>
+                                <input type="text" class="form-control" id="nombre" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">apellido</label>
+                                <input type="text" class="form-control" id="apellido" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">fecha de nacimiento</label>
+                                <input type="date" class="form-control" id="fecha_nacimiento" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">categoría</label>
+                                <select class="form-select" id="id_categoria" required>
+                                    <option value="1">familia</option>
+                                    <option value="2">trabajo</option>
+                                    <option value="3">escuela</option>
+                                    <option value="4">amigos</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">teléfono</label>
+                                <input type="tel" class="form-control" id="telefono">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">correo electrónico</label>
+                                <input type="email" class="form-control" id="correo">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" id="btn_guardar">guardar contacto</button>
+                                <button type="button" class="btn btn-outline-secondary d-none" id="btn_cancelar">cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-
             </div>
 
-        </div>
-
-    </div>
-
-    <!-- MODAL -->
-    <div class="modal fade" id="modalContacto" tabindex="-1">
-
-        <div class="modal-dialog">
-
-            <div class="modal-content">
-
-                <div class="modal-header">
-
-                    <h5 class="modal-title">
-                        Contacto
-                    </h5>
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                    </button>
-
-                </div>
-
-                <div class="modal-body">
-
-                    <input type="hidden" id="id_contacto">
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="nombre">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">lista de registros</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>nombre completo</th>
+                                        <th>categoría</th>
+                                        <th>contacto</th>
+                                        <th>acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_contactos">
+                                    </tbody>
+                            </table>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Apellido</label>
-
-                        <input
-                            type="text"
-                            class="form-control"
-                            id="apellido">
-                    </div>
-
                 </div>
-
-                <div class="modal-footer">
-
-                    <button
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                        Cancelar
-
-                    </button>
-
-                    <button
-                        class="btn btn-success"
-                        id="btnGuardar">
-
-                        Guardar
-
-                    </button>
-
-                </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-dark text-white text-center mt-5 p-3">
+    <script>
+        // ¡cambia esta url por la ruta real de tu api en hostinger!
+        const url_api = 'https://tu-dominio.com/backend-contactos/index.php';
 
-        Desarrollado por Andrés Jeriel Cruz Resendiz
+        document.addEventListener('DOMContentLoaded', () => {
+            cargar_contactos();
+        });
 
-    </footer>
+        document.getElementById('form_contacto').addEventListener('submit', function(e) {
+            e.preventDefault();
+            guardar_contacto();
+        });
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        document.getElementById('btn_cancelar').addEventListener('click', limpiar_formulario);
 
-    <script type="module" src="assets/js/app.js"></script>
+        async function cargar_contactos() {
+            try {
+                const respuesta = await fetch(url_api);
+                const datos = await respuesta.json();
+                const tbody = document.getElementById('tabla_contactos');
+                tbody.innerHTML = '';
 
+                if (datos.length > 0 && !datos.mensaje) {
+                    datos.forEach(contacto => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${contacto.nombre} ${contacto.apellido}</td>
+                            <td><span class="badge bg-secondary">${contacto.nombre_categoria}</span></td>
+                            <td><small class="text-muted">${contacto.datos || 'sin datos'}</small></td>
+                            <td>
+                                <button class="btn btn-warning btn-accion text-white" onclick="editar_contacto(${contacto.id_contacto}, '${contacto.nombre}', '${contacto.apellido}')">editar</button>
+                                <button class="btn btn-danger btn-accion" onclick="eliminar_contacto(${contacto.id_contacto})">eliminar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">no se encontraron contactos.</td></tr>';
+                }
+            } catch (error) {
+                console.error('error al cargar:', error);
+            }
+        }
+
+        async function guardar_contacto() {
+            const id_contacto = document.getElementById('id_contacto').value;
+            const payload = {
+                nombre: document.getElementById('nombre').value,
+                apellido: document.getElementById('apellido').value,
+                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
+                id_categoria: document.getElementById('id_categoria').value,
+                telefono: document.getElementById('telefono').value,
+                correo: document.getElementById('correo').value
+            };
+
+            let metodo = 'POST';
+            if (id_contacto) {
+                payload.id_contacto = id_contacto;
+                metodo = 'PUT';
+            }
+
+            try {
+                const respuesta = await fetch(url_api, {
+                    method: metodo,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (respuesta.ok) {
+                    limpiar_formulario();
+                    cargar_contactos();
+                } else {
+                    alert('hubo un error al procesar la solicitud.');
+                }
+            } catch (error) {
+                console.error('error al guardar:', error);
+            }
+        }
+
+        function editar_contacto(id, nombre, apellido) {
+            document.getElementById('id_contacto').value = id;
+            document.getElementById('nombre').value = nombre;
+            document.getElementById('apellido').value = apellido;
+            
+            document.getElementById('titulo_formulario').innerText = 'editar registro';
+            document.getElementById('btn_guardar').innerText = 'actualizar contacto';
+            document.getElementById('btn_guardar').classList.replace('btn-primary', 'btn-warning');
+            document.getElementById('btn_guardar').classList.add('text-white');
+            document.getElementById('btn_cancelar').classList.remove('d-none');
+        }
+
+        async function eliminar_contacto(id) {
+            if (confirm('¿estás seguro de que deseas eliminar este registro permanentemente?')) {
+                try {
+                    const respuesta = await fetch(url_api, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_contacto: id })
+                    });
+
+                    if (respuesta.ok) {
+                        cargar_contactos();
+                    } else {
+                        alert('no se pudo eliminar el contacto.');
+                    }
+                } catch (error) {
+                    console.error('error al eliminar:', error);
+                }
+            }
+        }
+
+        function limpiar_formulario() {
+            document.getElementById('form_contacto').reset();
+            document.getElementById('id_contacto').value = '';
+            document.getElementById('titulo_formulario').innerText = 'nuevo contacto';
+            document.getElementById('btn_guardar').innerText = 'guardar contacto';
+            document.getElementById('btn_guardar').classList.replace('btn-warning', 'btn-primary');
+            document.getElementById('btn_guardar').classList.remove('text-white');
+            document.getElementById('btn_cancelar').classList.add('d-none');
+        }
+    </script>
 </body>
-
 </html>
