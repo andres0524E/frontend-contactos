@@ -104,19 +104,16 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // ¡muy importante!
-        // cambia esta url por la ruta real de tu api en hostinger.
-        const url_api = 'https://tu-dominio.com/backend-contactos/index.php';
+        // url real de tu api en hostinger
+        const url_api = 'https://andresjcr.com/backend-contactos/index.php';
         
         let modal_instancia;
 
         document.addEventListener('DOMContentLoaded', () => {
-            // inicializamos el modal de bootstrap
             modal_instancia = new bootstrap.Modal(document.getElementById('modal_contacto'));
             cargar_contactos();
         });
 
-        // evento para abrir el modal vacío
         document.getElementById('btn_nuevo_contacto').addEventListener('click', () => {
             limpiar_formulario();
             modal_instancia.show();
@@ -167,10 +164,10 @@
                 correo: document.getElementById('correo').value
             };
 
-            let metodo = 'POST'; // post por defecto para crear
+            let metodo = 'POST';
             if (id_contacto) {
                 payload.id_contacto = id_contacto;
-                metodo = 'PUT'; // si hay id, cambiamos a put para actualizar
+                metodo = 'PUT';
             }
 
             try {
@@ -181,7 +178,7 @@
                 });
 
                 if (respuesta.ok) {
-                    modal_instancia.hide(); // cerramos el modal al guardar con éxito
+                    modal_instancia.hide();
                     cargar_contactos();
                 } else {
                     alert('hubo un error al procesar la solicitud.');
@@ -201,7 +198,7 @@
             document.getElementById('btn_guardar').classList.replace('btn-primary', 'btn-warning');
             document.getElementById('btn_guardar').classList.add('text-white');
             
-            modal_instancia.show(); // abrimos el modal con los datos cargados
+            modal_instancia.show();
         }
 
         async function eliminar_contacto(id) {
