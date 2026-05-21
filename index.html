@@ -45,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tabla_contactos">
-                                    </tbody>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -104,7 +104,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // url real de tu api en hostinger
         const url_api = 'https://andresjcr.com/backend-contactos/index.php';
         
         let modal_instancia;
@@ -139,7 +138,7 @@
                             <td><span class="badge bg-secondary">${contacto.nombre_categoria}</span></td>
                             <td><small class="text-muted">${contacto.datos || 'sin datos'}</small></td>
                             <td>
-                                <button class="btn btn-warning btn-accion text-white" onclick="editar_contacto(${contacto.id_contacto}, '${contacto.nombre}', '${contacto.apellido}')">editar</button>
+                                <button class="btn btn-warning btn-accion text-white" onclick="editar_contacto(${contacto.id_contacto}, '${contacto.nombre}', '${contacto.apellido}', '${contacto.fecha_nacimiento}')">editar</button>
                                 <button class="btn btn-danger btn-accion" onclick="eliminar_contacto(${contacto.id_contacto})">eliminar</button>
                             </td>
                         `;
@@ -164,16 +163,15 @@
                 correo: document.getElementById('correo').value
             };
 
-            let metodo = 'POST';
             if (id_contacto) {
                 payload.id_contacto = id_contacto;
-                metodo = 'PUT';
             }
 
             try {
+                // enviamos todo por post para evitar el bloqueo de hostinger
                 const respuesta = await fetch(url_api, {
-                    method: metodo,
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
@@ -188,10 +186,11 @@
             }
         }
 
-        function editar_contacto(id, nombre, apellido) {
+        function editar_contacto(id, nombre, apellido, fecha) {
             document.getElementById('id_contacto').value = id;
             document.getElementById('nombre').value = nombre;
             document.getElementById('apellido').value = apellido;
+            document.getElementById('fecha_nacimiento').value = fecha;
             
             document.getElementById('modal_titulo').innerText = 'editar registro';
             document.getElementById('btn_guardar').innerText = 'actualizar contacto';
@@ -204,10 +203,11 @@
         async function eliminar_contacto(id) {
             if (confirm('¿estás seguro de que deseas eliminar este registro permanentemente?')) {
                 try {
+                    // enviamos por post con una bandera de accion
                     const respuesta = await fetch(url_api, {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id_contacto: id })
+                        method: 'POST',
+                        headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({ accion: 'eliminar', id_contacto: id })
                     });
 
                     if (respuesta.ok) {
