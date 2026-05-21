@@ -168,7 +168,6 @@
             }
 
             try {
-                // enviamos todo por post para evitar el bloqueo de hostinger
                 const respuesta = await fetch(url_api, {
                     method: 'POST',
                     headers: { 'content-type': 'application/json' },
@@ -179,7 +178,8 @@
                     modal_instancia.hide();
                     cargar_contactos();
                 } else {
-                    alert('hubo un error al procesar la solicitud.');
+                    const error_data = await respuesta.json();
+                    alert(error_data.mensaje || 'hubo un error al procesar la solicitud.');
                 }
             } catch (error) {
                 console.error('error al guardar:', error);
@@ -203,7 +203,6 @@
         async function eliminar_contacto(id) {
             if (confirm('¿estás seguro de que deseas eliminar este registro permanentemente?')) {
                 try {
-                    // enviamos por post con una bandera de accion
                     const respuesta = await fetch(url_api, {
                         method: 'POST',
                         headers: { 'content-type': 'application/json' },
@@ -213,7 +212,8 @@
                     if (respuesta.ok) {
                         cargar_contactos();
                     } else {
-                        alert('no se pudo eliminar el contacto.');
+                        const error_data = await respuesta.json();
+                        alert(error_data.mensaje || 'no se pudo eliminar el contacto.');
                     }
                 } catch (error) {
                     console.error('error al eliminar:', error);
