@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gestor de contactos</title>
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f4f6f9; }
@@ -109,18 +109,18 @@
         
         let modal_instancia;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            modal_instancia = new bootstrap.Modal(document.getElementById('modal_contacto'));
+        document.addEventListener('domcontentloaded', () => {
+            modal_instancia = new bootstrap.modal(document.getelementbyid('modal_contacto'));
             cargar_contactos();
         });
 
-        document.getElementById('btn_nuevo_contacto').addEventListener('click', () => {
+        document.getelementbyid('btn_nuevo_contacto').addeventlistener('click', () => {
             limpiar_formulario();
             modal_instancia.show();
         });
 
-        document.getElementById('form_contacto').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.getelementbyid('form_contacto').addeventlistener('submit', function(e) {
+            e.preventdefault();
             guardar_contacto();
         });
 
@@ -128,13 +128,13 @@
             try {
                 const respuesta = await fetch(url_api, { cache: 'no-store' });
                 const datos = await respuesta.json();
-                const tbody = document.getElementById('tabla_contactos');
-                tbody.innerHTML = '';
+                const tbody = document.getelementbyid('tabla_contactos');
+                tbody.innerhtml = '';
 
                 if (datos.length > 0 && !datos.mensaje) {
-                    datos.forEach(contacto => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
+                    datos.foreach(contacto => {
+                        const tr = document.createelement('tr');
+                        tr.innerhtml = `
                             <td>${contacto.nombre} ${contacto.apellido}</td>
                             <td><span class="badge bg-secondary">${contacto.nombre_categoria}</span></td>
                             <td><small class="text-muted">${contacto.datos || 'sin datos'}</small></td>
@@ -143,10 +143,10 @@
                                 <button class="btn btn-danger btn-accion" onclick="eliminar_contacto(${contacto.id_contacto})">eliminar</button>
                             </td>
                         `;
-                        tbody.appendChild(tr);
+                        tbody.appendchild(tr);
                     });
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">no se encontraron contactos.</td></tr>';
+                    tbody.innerhtml = '<tr><td colspan="4" class="text-center text-muted">no se encontraron contactos.</td></tr>';
                 }
             } catch (error) {
                 console.error('error al cargar:', error);
@@ -154,14 +154,14 @@
         }
 
         async function guardar_contacto() {
-            const id_contacto = document.getElementById('id_contacto').value;
+            const id_contacto = document.getelementbyid('id_contacto').value;
             const payload = {
-                nombre: document.getElementById('nombre').value,
-                apellido: document.getElementById('apellido').value,
-                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-                id_categoria: document.getElementById('id_categoria').value,
-                telefono: document.getElementById('telefono').value,
-                correo: document.getElementById('correo').value
+                nombre: document.getelementbyid('nombre').value,
+                apellido: document.getelementbyid('apellido').value,
+                fecha_nacimiento: document.getelementbyid('fecha_nacimiento').value,
+                id_categoria: document.getelementbyid('id_categoria').value,
+                telefono: document.getelementbyid('telefono').value,
+                correo: document.getelementbyid('correo').value
             };
 
             if (id_contacto) {
@@ -170,9 +170,9 @@
 
             try {
                 const respuesta = await fetch(url_api, {
-                    method: 'POST',
+                    method: 'post',
                     headers: { 'content-type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: json.stringify(payload)
                 });
 
                 if (respuesta.ok) {
@@ -188,15 +188,15 @@
         }
 
         function editar_contacto(id, nombre, apellido, fecha) {
-            document.getElementById('id_contacto').value = id;
-            document.getElementById('nombre').value = nombre;
-            document.getElementById('apellido').value = apellido;
-            document.getElementById('fecha_nacimiento').value = fecha;
+            document.getelementbyid('id_contacto').value = id;
+            document.getelementbyid('nombre').value = nombre;
+            document.getelementbyid('apellido').value = apellido;
+            document.getelementbyid('fecha_nacimiento').value = fecha;
             
-            document.getElementById('modal_titulo').innerText = 'editar registro';
-            document.getElementById('btn_guardar').innerText = 'actualizar contacto';
-            document.getElementById('btn_guardar').classList.replace('btn-primary', 'btn-warning');
-            document.getElementById('btn_guardar').classList.add('text-white');
+            document.getelementbyid('modal_titulo').innertext = 'editar registro';
+            document.getelementbyid('btn_guardar').innertext = 'actualizar contacto';
+            document.getelementbyid('btn_guardar').classlist.replace('btn-primary', 'btn-warning');
+            document.getelementbyid('btn_guardar').classlist.add('text-white');
             
             modal_instancia.show();
         }
@@ -205,9 +205,9 @@
             if (confirm('¿estás seguro de que deseas eliminar este registro permanentemente?')) {
                 try {
                     const respuesta = await fetch(url_api, {
-                        method: 'POST',
+                        method: 'post',
                         headers: { 'content-type': 'application/json' },
-                        body: JSON.stringify({ accion: 'eliminar', id_contacto: id })
+                        body: json.stringify({ accion: 'eliminar', id_contacto: id })
                     });
 
                     if (respuesta.ok) {
@@ -223,12 +223,12 @@
         }
 
         function limpiar_formulario() {
-            document.getElementById('form_contacto').reset();
-            document.getElementById('id_contacto').value = '';
-            document.getElementById('modal_titulo').innerText = 'nuevo contacto';
-            document.getElementById('btn_guardar').innerText = 'guardar contacto';
-            document.getElementById('btn_guardar').classList.replace('btn-warning', 'btn-primary');
-            document.getElementById('btn_guardar').classList.remove('text-white');
+            document.getelementbyid('form_contacto').reset();
+            document.getelementbyid('id_contacto').value = '';
+            document.getelementbyid('modal_titulo').innertext = 'nuevo contacto';
+            document.getelementbyid('btn_guardar').innertext = 'guardar contacto';
+            document.getelementbyid('btn_guardar').classlist.replace('btn-warning', 'btn-primary');
+            document.getelementbyid('btn_guardar').classlist.remove('text-white');
         }
     </script>
 </body>
