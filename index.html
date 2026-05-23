@@ -125,7 +125,8 @@
 
         async function cargar_contactos() {
             try {
-                const respuesta = await fetch(url_api);
+                // agregamos cache: 'no-store' para evadir la caché del navegador obligatoriamente
+                const respuesta = await fetch(url_api, { cache: 'no-store' });
                 const datos = await respuesta.json();
                 const tbody = document.getElementById('tabla_contactos');
                 tbody.innerHTML = '';
